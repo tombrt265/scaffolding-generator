@@ -1,10 +1,11 @@
 const API_URL = import.meta.env.VITE_API_BASE_URL;
 
-export async function submitForm(answers: string[]) {
-  const res = await fetch(`${API_URL}/submit-form`, {
+export async function extractStudyMaterial(
+  formData: FormData
+): Promise<{ text: string }> {
+  const res = await fetch(`${API_URL}/extract-study-material`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ answers }),
+    body: formData,
   });
   return res.json();
 }

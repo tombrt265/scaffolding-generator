@@ -1,6 +1,6 @@
 from fastapi import APIRouter, UploadFile, File
 from app.api.pdf_utils import extract_text_from_pdf
-from app.api.models import KnowledgeGraphRequest
+from app.api.models import StudyMaterial
 from app.api.agents import generate_knowledge_graph
 
 router = APIRouter()
@@ -11,6 +11,6 @@ async def extract_study_material(file: UploadFile = File(...)):
     return {"text": extract_text_from_pdf(content)}
 
 @router.post("/create-knowledge-graph")
-async def create_knowledge_graph(request: KnowledgeGraphRequest):
+async def create_knowledge_graph(request: StudyMaterial):
     graph = await generate_knowledge_graph(request)
-    return {"text": graph.knowledge_graph}
+    return {"nodes": graph.nodes, "edges": graph.edges}

@@ -41,7 +41,9 @@ export default function App() {
 
     try {
       const res = await createKnowledgeGraph(text);
-      setGraphText(res.text ?? "Kein Graph-Text zurückgegeben.");
+      setGraphText(
+        JSON.stringify(res, null, 2) ?? "Kein Graph-Text zurückgegeben."
+      );
     } catch {
       setGraphText("Fehler beim Erstellen des Knowledge Graphs.");
     } finally {

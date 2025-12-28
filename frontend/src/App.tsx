@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { extractStudyMaterial, createKnowledgeGraph } from "./services/api";
+import { extractStudyMaterial, createStudyPlan } from "./services/api";
+import ReactMarkdown from "react-markdown";
 
 export default function App() {
   const [file, setFile] = useState<File | null>(null);
-  const [text, setText] = useState("");
-  const [graphText, setGraphText] = useState("");
+  const [studyMaterial, setStudyMaterial] = useState("");
+  const [planText, setPlanText] = useState("");
   const [loading, setLoading] = useState(false);
-  const [graphLoading, setGraphLoading] = useState(false);
+  const [planLoading, setPlanLoading] = useState(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -18,36 +19,34 @@ export default function App() {
     if (!file) return;
 
     setLoading(true);
-    setText("");
+    setStudyMaterial("");
 
     const formData = new FormData();
     formData.append("file", file);
 
     try {
       const res = await extractStudyMaterial(formData);
-      setText(res.text ?? "Kein Text zurückgegeben.");
+      setStudyMaterial(res.text ?? "Kein Text zurückgegeben.");
     } catch {
-      setText("Fehler beim Extrahieren.");
+      setStudyMaterial("Fehler beim Extrahieren.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleCreateGraph = async () => {
-    if (!text) return;
+  const handleCreatePlan = async () => {
+    if (!studyMaterial) return;
 
-    setGraphLoading(true);
-    setGraphText("");
+    setPlanLoading(true);
+    setPlanText("");
 
     try {
-      const res = await createKnowledgeGraph(text);
-      setGraphText(
-        JSON.stringify(res, null, 2) ?? "Kein Graph-Text zurückgegeben."
-      );
+      const res = await createStudyPlan(studyMaterial);
+      setPlanText(res.study_plan ?? "Kein Graph-Text zurückgegeben.");
     } catch {
-      setGraphText("Fehler beim Erstellen des Knowledge Graphs.");
+      setPlanText("Fehler beim Erstellen des Knowledge Graphs.");
     } finally {
-      setGraphLoading(false);
+      setPlanLoading(false);
     }
   };
 
@@ -91,35 +90,38 @@ export default function App() {
 
       {/* Extracted Text */}
       <textarea
-        value={text}
+        value={studyMaterial}
         readOnly
         placeholder="Extrahierter Text erscheint hier..."
         className="w-full h-64 mt-6 p-3 border rounded-lg resize-y border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400"
       />
 
-      {/* Knowledge Graph Button */}
+      {/* Study Plan Button */}
       <button
-        onClick={handleCreateGraph}
-        disabled={!text || graphLoading}
+        onClick={handleCreatePlan}
+        disabled={!studyMaterial || planLoading}
         className={`w-full mt-4 py-3 rounded-lg font-semibold text-white transition
           ${
-            text && !graphLoading
+            studyMaterial && !planLoading
               ? "bg-blue-600 hover:bg-blue-700"
               : "bg-gray-400 cursor-not-allowed"
           }`}
       >
-        {graphLoading
-          ? "Erstelle Knowledge Graph..."
-          : "Knowledge Graph erstellen"}
+        {planLoading ? "Erstelle Study Plan..." : "Study Plan erstellen"}
       </button>
 
-      {/* Knowledge Graph Output */}
-      <textarea
-        value={graphText}
+      {/* Study Plan Output */}
+      {/* <textarea
+        value={planText}
         readOnly
-        placeholder="Knowledge Graph Output erscheint hier..."
+        placeholder="Study Plan Output erscheint hier..."
         className="w-full h-64 mt-6 p-3 border rounded-lg resize-y border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-      />
+      /> */}
+      {planText && (
+        <div className="mt-6 p-6 bg-gray-50 rounded-lg prose max-w-none">
+          <ReactMarkdown>{planText}</ReactMarkdown>
+        </div>
+      )}
     </div>
   );
 }

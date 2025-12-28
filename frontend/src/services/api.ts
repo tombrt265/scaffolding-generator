@@ -23,3 +23,16 @@ export async function createKnowledgeGraph(
   });
   return res.json();
 }
+
+export async function createStudyPlan(
+  text: string
+): Promise<{ study_plan: string }> {
+  const res = await fetch(`${API_URL}/create-study-plan`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ study_material: text }),
+  });
+  return res.json();
+}

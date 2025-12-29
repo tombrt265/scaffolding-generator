@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File
 from app.api.pdf_utils import extract_text_from_pdf
 from app.api.models import StudyMaterial, StudyPlan
-from app.api.agents import generate_study_plan, generate_knowledge_graph
+from app.api.agents import generate_study_plan
 router = APIRouter()
 
 @router.post("/extract-study-material")

@@ -91,7 +91,7 @@ export default function App() {
         value={studyMaterial}
         readOnly
         placeholder="Extrahierter Text erscheint hier..."
-        className="w-full h-64 mt-6 p-3 border rounded-lg resize-y border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400"
+        className="w-full h-48 mt-6 p-3 border rounded-lg border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400"
       />
 
       {/* Study Plan Button */}
@@ -110,12 +110,9 @@ export default function App() {
 
       {/* Study Plan Output */}
       {typeof studyPlan === "string" ? (
-        <textarea
-          value={studyPlan}
-          readOnly
-          placeholder="Study Plan Output erscheint hier..."
-          className="w-full h-64 mt-6 p-3 border rounded-lg resize-y border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
+        <div className="mt-6 p-6 bg-gray-50 rounded-lg prose max-w-none">
+          <h2>Study Plan Output erscheint hier...</h2>
+        </div>
       ) : (
         <div className="mt-6 p-6 bg-gray-50 rounded-lg prose max-w-none">
           <h2>Study Plan Overview</h2>

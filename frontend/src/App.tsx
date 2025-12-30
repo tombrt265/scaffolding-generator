@@ -43,12 +43,13 @@ export default function App() {
 
   const handleCreatePlan = async () => {
     if (!studyMaterial) return;
+    if (!selectedDate) return;
 
     setPlanLoading(true);
     setStudyPlan("");
 
     try {
-      const res = await createStudyPlan(studyMaterial);
+      const res = await createStudyPlan(studyMaterial, selectedDate);
       setStudyPlan(res ?? "Kein Study Plan zurückgegeben.");
     } catch {
       setStudyPlan("Fehler beim Erstellen des Study Plans.");

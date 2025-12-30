@@ -11,13 +11,19 @@ export async function extractStudyMaterial(
   return res.json();
 }
 
-export async function createStudyPlan(text: string): Promise<StudyPlan> {
+export async function createStudyPlan(
+  material: string,
+  date: Date
+): Promise<StudyPlan> {
   const res = await fetch(`${API_URL}/create-study-plan`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ study_material: text }),
+    body: JSON.stringify({
+      study_material: material,
+      date: date.toISOString(),
+    }),
   });
   return res.json();
 }

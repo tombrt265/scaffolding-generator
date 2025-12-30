@@ -22,7 +22,7 @@ export async function createStudyPlan(
     },
     body: JSON.stringify({
       study_material: material,
-      date: date.toISOString(),
+      date: date.toISOString().slice(0, 10), // Format date as YYYY-MM-DD
     }),
   });
   return res.json();

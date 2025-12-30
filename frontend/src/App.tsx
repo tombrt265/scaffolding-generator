@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { extractStudyMaterial, createStudyPlan } from "./services/api";
 import type { StudyPlan } from "./models";
+import { Calendar25 } from "@/components/date-picker";
 
 export default function App() {
   const [file, setFile] = useState<File | null>(null);
@@ -8,6 +9,11 @@ export default function App() {
   const [studyPlan, setStudyPlan] = useState<StudyPlan | string>("");
   const [loading, setLoading] = useState(false);
   const [planLoading, setPlanLoading] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+
+  const handleDateUpload = (date: Date | undefined) => {
+    setSelectedDate(date);
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -53,7 +59,12 @@ export default function App() {
 
   return (
     <div className="max-w-xl mx-auto mt-16 p-6 bg-white rounded-lg shadow-md font-sans">
-      <h1 className="text-3xl font-bold text-center mb-8">study planner v1</h1>
+      <h1 className="text-3xl font-bold text-center mb-4">study planner v1</h1>
+
+      {/* Date Picker Component */}
+      <div className="w-full flex flex-col justify-center items-center">
+        <Calendar25 onSelect={(date) => handleDateUpload(date)} />
+      </div>
 
       {/* File Upload */}
       <label
@@ -101,10 +112,10 @@ export default function App() {
       {/* Study Plan Button */}
       <button
         onClick={handleCreatePlan}
-        disabled={!studyMaterial || planLoading}
+        disabled={!studyMaterial || planLoading || !selectedDate}
         className={`w-full mt-4 py-3 rounded-lg font-semibold text-white transition
           ${
-            studyMaterial && !planLoading
+            studyMaterial && !planLoading && selectedDate
               ? "bg-blue-600 hover:bg-blue-700"
               : "bg-gray-400 cursor-not-allowed"
           }`}

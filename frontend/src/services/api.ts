@@ -1,5 +1,5 @@
 const API_URL = import.meta.env.VITE_API_BASE_URL;
-import type { StudyPlan } from "../models";
+import type { StudyPlan } from "../models/study-plan-model";
 
 export async function extractStudyMaterial(
   formData: FormData
